@@ -169,7 +169,7 @@ input[type="text"] {
     background: #000; border: 2px solid #fff; color: #fff; padding: 3px 6px; font-size: 7px; white-space: nowrap;
 }
 
-/* NEW ARROW BUTTON HUD LAYOUT (FIXES JOYSTICK STUCK COMPLETELY) */
+/* NEW BUTTONS HUD WITH TOUCH CONFLICT RESOLUTION CSS */
 #mobile-controls { 
     position: absolute; bottom: 15px; left: 0; width: 100%; 
     display: flex; justify-content: space-between; align-items: flex-end;
@@ -180,6 +180,7 @@ input[type="text"] {
     display: flex; flex-direction: column; align-items: center;
     background: rgba(0, 0, 0, 0.4); padding: 8px; border-radius: 10px;
     pointer-events: auto;
+    touch-action: none; /* Prevents scroll gestures on buttons pad */
 }
 
 .middle-arrows {
@@ -192,6 +193,7 @@ input[type="text"] {
     width: 54px; height: 54px; background: #ffaa00; border: 3px solid #000;
     border-radius: 6px; font-size: 1.2rem; color: #000; font-weight: bold;
     cursor: pointer; box-shadow: 0 4px 0 #996600;
+    touch-action: none;
 }
 .arrow-btn:active {
     transform: translateY(3px); box-shadow: 0 1px 0 #996600; background: #ffcc00;
@@ -201,6 +203,7 @@ input[type="text"] {
     width: 80px; height: 80px; background: #ff3333; border: 4px solid #000; 
     border-radius: 50%; color: white; font-size: 0.6rem; cursor: pointer; 
     pointer-events: auto; box-shadow: 0 5px 0 #990000; font-family: 'Press Start 2P', monospace;
+    touch-action: none;
 }
 #jump-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #990000; }
 
