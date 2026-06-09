@@ -37,19 +37,19 @@ let currentCamAngleZ = 0;
 const COLORS_POOL = ['#f44336', '#3f51b5', '#4caf50', '#ffeb3b', '#9c27b0', '#ff9800'];
 const COLOR_NAMES = { '#f44336': 'RED', '#3f51b5': 'BLUE', '#4caf50': 'GREEN', '#ffeb3b': 'YELLOW', '#9c27b0': 'PURPLE', '#ff9800': 'ORANGE' };
 
-// Fullscreen & Horizontal Enforcer Mechanism
-function activateImmersiveFullscreen() {
+// Handle Fullscreen Landscape trigger only AFTER picking a mode
+function triggerModeSelection(targetScreenId, modeContext = '') {
+    // Fire Immersive Fullscreen and Request Orientation Shift
     let docEl = document.documentElement;
     if (docEl.requestFullscreen) { docEl.requestFullscreen(); }
     else if (docEl.webkitRequestFullscreen) { docEl.webkitRequestFullscreen(); }
-    else if (docEl.msRequestFullscreen) { docEl.msRequestFullscreen(); }
     
     if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(err => console.log("Orientation lock bypassed"));
+        screen.orientation.lock('landscape').catch(() => console.log("Orientation lock handled contextually"));
     }
-    
-    document.getElementById('fullscreen-overlay').classList.add('hidden');
-    document.getElementById('main-menu').classList.remove('hidden');
+
+    // Advance to target screen configuration
+    showScreen(targetScreenId, modeContext);
 }
 
 function showScreen(screenId, modeContext = '') {
@@ -111,7 +111,7 @@ function hostFriendRoom() {
         infoBox.classList.remove('hidden');
         infoBox.innerHTML = `ROOM: ${activeRoomName}<br>INSERT CODE: <span style="color:#00ffcc; font-size:1.2rem;">${activeRoomCode}</span>`;
         document.getElementById('lobby-status').innerText = "AWAITING SECOND INSERTION COIN...";
-        document.getElementById('player-list-lobby').innerHTML = `<div style="color:#00ffcc">• ${localPlayerName} (PILOT_1)</div>`;
+        document.getElementById('player-list-lobby').innerHTML = `<div style="color:#00ffcc">• ${localPlayerName} (BOX_1)</div>`;
     });
 }
 
@@ -146,13 +146,13 @@ function setupP2PDataChannels() {
             
             if (isHostInstance) {
                 document.getElementById('player-list-lobby').innerHTML = `
-                    <div style="color:#00ffcc">• ${localPlayerName} (PILOT_1)</div>
-                    <div style="color:#ffea00">• ${connectedPeerName} (PILOT_2)</div>`;
+                    <div style="color:#00ffcc">• ${localPlayerName} (BOX_1)</div>
+                    <div style="color:#ffea00">• ${connectedPeerName} (BOX_2)</div>`;
                 document.getElementById('start-p2p-game-btn').classList.remove('hidden');
             } else {
                 document.getElementById('player-list-lobby').innerHTML = `
-                    <div style="color:#ffea00">• ${connectedPeerName} (PILOT_1)</div>
-                    <div style="color:#00ffcc">• ${localPlayerName} (PILOT_2)</div>`;
+                    <div style="color:#ffea00">• ${connectedPeerName} (BOX_1)</div>
+                    <div style="color:#00ffcc">• ${localPlayerName} (BOX_2)</div>`;
                 document.getElementById('lobby-status').innerText = "AWAITING ENGINE COMMAND FROM COIN CABINET HOST...";
             }
         }
@@ -255,11 +255,11 @@ function initGameEngine() {
             tile.style.top = `${row * TILE_DIM}px`;
             tile.dataset.id = `t_${row}_${col}`;
             map.appendChild(tile);
-            tilesData.push({ id: tile.dataset.id, element: tile, color: '#221a36', capturedBy: null });
+            tilesData.push({ id: tile.dataset.id, element: tile, color: '#251b3d', capturedBy: null });
         }
     }
 
-    // Spawn Player Characters with added angle orientation states
+    // Spawn 3D Box Entity Elements
     playersArray.push({
         id: localPlayerId, name: localPlayerName, x: 385, y: 600, z: 0, angle: 0, isBot: false, alive: true, element: createEntityNode(localPlayerName, 'local-player')
     });
@@ -273,9 +273,9 @@ function initGameEngine() {
     }
 
     for(let i = 1; i <= totalAIBots; i++) {
-        let nameTag = `SHIP_${i}`;
+        let nameTag = `BOX_${i}`;
         playersArray.push({
-            id: `b_${i}`, name: nameTag, x: Math.random() * 700 + 50, y: Math.random() * 550 + 50, z: 0, angle: Math.random() * 360, isBot: true, alive: true, element: createEntityNode(nameTag, 'bot')
+            id: `b_${i}`, name: nameTag, x: Math.random() * 700 + 50, y: Math.random() * 550 + 50, z: 0, angle: 0, isBot: true, alive: true, element: createEntityNode(nameTag, 'bot')
         });
     }
 
@@ -303,48 +303,50 @@ function createEntityNode(name, variantClass) {
 }
 
 // ==========================================
-// CRITICAL FIX: ANTI-STUCK DYNAMIC JOYSTICK
+// UNBREAKABLE GLOBAL STUCK-FREE JOYSTICK
 // ==========================================
 let joystickVectors = { x: 0, y: 0 };
-let isPointerActive = false;
 
 function setupTouchJoystickControl() {
     const knob = document.getElementById('joystick-knob');
     const zone = document.getElementById('joystick-zone');
     
-    // Clear initial state frames safely
     joystickVectors = { x: 0, y: 0 };
-    isPointerActive = false;
+    let activePointerId = null;
 
-    zone.onpointerdown = (e) => { 
-        isPointerActive = true;
-        zone.setPointerCapture(e.pointerId); 
-        processMovementCoordinates(e); 
-    };
-    
-    zone.onpointermove = (e) => { 
-        if (isPointerActive) processMovementCoordinates(e); 
-    };
-    
-    // Clear Stuck State on multiple trigger combinations for global reliability
-    const clearJoystickFrictionSignal = (e) => {
-        if (!isPointerActive) return;
-        isPointerActive = false;
-        try { zone.releasePointerCapture(e.pointerId); } catch(err){}
+    // Reset calculation tracker helper
+    function forceResetJoystickState() {
+        activePointerId = null;
         knob.style.left = '50%'; 
         knob.style.top = '50%'; 
-        joystickVectors = { x: 0, y: 0 }; 
-    };
+        joystickVectors = { x: 0, y: 0 };
+    }
 
-    zone.onpointerup = clearJoystickFrictionSignal;
-    zone.onpointercancel = clearJoystickFrictionSignal;
-    zone.onpointerout = clearJoystickFrictionSignal;
-    zone.onpointerleave = clearJoystickFrictionSignal;
+    zone.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        activePointerId = e.pointerId;
+        zone.setPointerCapture(e.pointerId);
+        processCoordinates(e);
+    });
 
-    function processMovementCoordinates(e) {
+    zone.addEventListener('pointermove', (e) => {
+        if (activePointerId === e.pointerId) {
+            processCoordinates(e);
+        }
+    });
+
+    // Handle standard pointer up/cancel inside the region
+    zone.addEventListener('pointerup', (e) => { if(e.pointerId === activePointerId) forceResetJoystickState(); });
+    zone.addEventListener('pointercancel', (e) => { if(e.pointerId === activePointerId) forceResetJoystickState(); });
+
+    // GLOBAL CATCHERS: Safely unlocks movement even if fingers leave the boundary area completely
+    window.addEventListener('pointerup', forceResetJoystickState);
+    window.addEventListener('pointercancel', forceResetJoystickState);
+
+    function processCoordinates(e) {
         let bounds = zone.getBoundingClientRect();
-        let centerX = bounds.left + bounds.width/2;
-        let centerY = bounds.top + bounds.height/2;
+        let centerX = bounds.left + bounds.width / 2;
+        let centerY = bounds.top + bounds.height / 2;
         let deltaX = e.clientX - centerX;
         let deltaY = e.clientY - centerY;
         let totalDistance = Math.hypot(deltaX, deltaY);
@@ -358,6 +360,7 @@ function setupTouchJoystickControl() {
         knob.style.left = `${50 + (deltaX / bounds.width) * 100}%`;
         knob.style.top = `${50 + (deltaY / bounds.height) * 100}%`;
         
+        // Populate precise float vector layouts smoothly
         joystickVectors.x = deltaX / absoluteRadius;
         joystickVectors.y = deltaY / absoluteRadius;
     }
@@ -374,23 +377,23 @@ function triggerLocalPlayerJump() {
 }
 
 // ==========================================
-// CORE ENGINE PHYSICS TICK & ROTATE MAP MAP
+// TICK SIMULATION & MAP PERSPECTIVE ENGINE
 // ==========================================
 function runEnginePhysicsTick() {
-    const currentMaxVelocity = 4.5;
+    const currentMaxVelocity = 4.6;
     let hero = playersArray.find(p => p.id === localPlayerId);
     let currentInputMoved = false;
     let currentMoveVector = { x: 0, y: 0 };
 
     if (hero && hero.alive) {
-        // Evaluate Joystick movement
-        if (Math.abs(joystickVectors.x) > 0.15 || Math.abs(joystickVectors.y) > 0.15) {
+        // Calculate Touch Vectors
+        if (Math.abs(joystickVectors.x) > 0.1 || Math.abs(joystickVectors.y) > 0.1) {
             currentMoveVector.x = joystickVectors.x * currentMaxVelocity;
             currentMoveVector.y = joystickVectors.y * currentMaxVelocity;
             currentInputMoved = true;
         }
 
-        // Evaluate Keypad shifts
+        // Calculate Keypad entries
         if (keyStateTracker['w'] || keyStateTracker['arrowup']) { currentMoveVector.y = -currentMaxVelocity; currentInputMoved = true; }
         if (keyStateTracker['s'] || keyStateTracker['arrowdown']) { currentMoveVector.y = currentMaxVelocity; currentInputMoved = true; }
         if (keyStateTracker['a'] || keyStateTracker['arrowleft']) { currentMoveVector.x = -currentMaxVelocity; currentInputMoved = true; }
@@ -400,12 +403,11 @@ function runEnginePhysicsTick() {
         if (currentInputMoved) {
             hero.x += currentMoveVector.x;
             hero.y += currentMoveVector.y;
-            // Calculate Character Heading orientation angle based on translation direction
-            hero.angle = Math.atan2(currentMoveVector.y, currentMoveVector.x) * (180 / Math.PI) + 90;
+            hero.angle = Math.atan2(currentMoveVector.y, currentMoveVector.x) * (180 / Math.PI);
         }
 
-        hero.x = Math.max(0, Math.min(768, hero.x));
-        hero.y = Math.max(0, Math.min(768, hero.y));
+        hero.x = Math.max(4, Math.min(762, hero.x));
+        hero.y = Math.max(4, Math.min(762, hero.y));
 
         if (currentGameMode === 'friend' && activeConnection) {
             activeConnection.send({
@@ -414,20 +416,19 @@ function runEnginePhysicsTick() {
         }
     }
 
-    // MAP DYNAMIC ROTATION CALCULATION BASED ON TARGET SPECTATING SUBJECT NODE
+    // MAP DYNAMIC ROTATION MATHEMATICS (FOLLOW MECHANIC)
     let targetSubject = playersArray.find(p => p.id === spectatingTargetId);
     if (targetSubject && targetSubject.alive) {
-        // Calculate responsive target adjustments using subject speed deviations
         let normX = (targetSubject.x - 400) / 400; 
         let normY = (targetSubject.y - 400) / 400; 
 
-        targetCamAngleX = 54 + (normY * 12); 
-        targetCamAngleZ = -(normX * 22); 
+        targetCamAngleX = 54 + (normY * 13); 
+        targetCamAngleZ = -(normX * 24); 
     } else {
         targetCamAngleX = 55; targetCamAngleZ = 0;
     }
 
-    // Apply Smooth LERP to avoid sudden camera jerks
+    // Smooth camera interpolation tracking
     currentCamAngleX += (targetCamAngleX - currentCamAngleX) * 0.08;
     currentCamAngleZ += (targetCamAngleZ - currentCamAngleZ) * 0.08;
 
@@ -436,7 +437,7 @@ function runEnginePhysicsTick() {
         mapNode.style.transform = `rotateX(${currentCamAngleX}deg) rotateZ(${currentCamAngleZ}deg)`;
     }
 
-    // Render Entities Matrix Calculations
+    // Process Active Board Elements
     playersArray.forEach(p => {
         if (!p.alive) return;
 
@@ -448,21 +449,20 @@ function runEnginePhysicsTick() {
             executeAdvancedBotAIPhysics(p);
         }
 
-        // Apply Character Design Translation + Head rotation tracking simultaneously
+        // Project translations smoothly onto map grid layout
         p.element.style.left = `${p.x}px`;
         p.element.style.top = `${p.y}px`;
-        p.element.style.transform = `translateZ(${12 + p.z}px) rotateZ(${p.angle || 0}deg)`;
+        p.element.style.transform = `translateZ(${14 + p.z}px) rotateY(${p.z * 4}deg)`;
 
-        // Capture tiles tracker logic
         let col = Math.floor((p.x + 16) / TILE_DIM);
         let row = Math.floor((p.y + 16) / TILE_DIM);
         let currentTile = tilesData.find(t => t.id === `t_${row}_${col}`);
 
         if (currentTile && isRoundActive && currentTile.color === currentRoundColor && p.z === 0) {
             if (currentTile.capturedBy === null || currentTile.capturedBy === p.id) {
-                tilesData.forEach(t => { if(t.capturedBy === p.id) { t.capturedBy = null; t.element.style.border = '2px solid #140d26'; } });
+                tilesData.forEach(t => { if(t.capturedBy === p.id) { t.capturedBy = null; t.element.style.border = '4px solid #0e071e'; } });
                 currentTile.capturedBy = p.id;
-                currentTile.element.style.border = `3px dashed ${p.isBot ? '#ff0055' : '#00ffcc'}`;
+                currentTile.element.style.border = `4px dashed ${p.isBot ? '#ff0055' : '#00ffcc'}`;
             }
         }
     });
@@ -478,19 +478,12 @@ function executeAdvancedBotAIPhysics(bot) {
         if(d < minD) { minD = d; targetTile = t; }
     });
 
-    let tx = parseInt(targetTile.element.style.left) + 22;
-    let ty = parseInt(targetTile.element.style.top) + 22;
-    let speed = aiDifficulty === 'beginner' ? 2.2 : (aiDifficulty === 'master' ? 4.8 : 3.5);
+    let tx = parseInt(targetTile.element.style.left) + 21;
+    let ty = parseInt(targetTile.element.style.top) + 21;
+    let speed = aiDifficulty === 'beginner' ? 2.2 : (aiDifficulty === 'master' ? 4.9 : 3.5);
 
-    let diffX = tx - bot.x;
-    let diffY = ty - bot.y;
-
-    if (Math.abs(diffX) > 4) bot.x += bot.x < tx ? speed : -speed;
-    if (Math.abs(diffY) > 4) bot.y += bot.y < ty ? speed : -speed;
-    
-    if (Math.abs(diffX) > 2 || Math.abs(diffY) > 2) {
-        bot.angle = Math.atan2(diffY, diffX) * (180 / Math.PI) + 90;
-    }
+    if (Math.abs(bot.x - tx) > 4) bot.x += bot.x < tx ? speed : -speed;
+    if (Math.abs(bot.y - ty) > 4) bot.y += bot.y < ty ? speed : -speed;
 }
 
 // ==========================================
@@ -499,12 +492,12 @@ function executeAdvancedBotAIPhysics(bot) {
 function startNextRoundLoop() {
     isRoundActive = false;
     currentRoundColor = '';
-    document.getElementById('target-color-display').innerText = "GENERATING LEVEL MATRIX CHIPS...";
+    document.getElementById('target-color-display').innerText = "ROLLING NEW BOARD TILES...";
     document.getElementById('target-color-display').style.color = '#ffffff';
 
     tilesData.forEach(t => {
-        t.color = '#221a36'; t.capturedBy = null; t.element.className = 'tile';
-        t.element.style.backgroundColor = '#221a36'; t.element.style.border = '2px solid #140d26';
+        t.color = '#251b3d'; t.capturedBy = null; t.element.className = 'tile';
+        t.element.style.backgroundColor = '#251b3d'; t.element.style.border = '4px solid #0e071e';
     });
 
     setTimeout(() => {
@@ -592,7 +585,7 @@ function processRoundCollapseSequence() {
         if (survivors.length <= 1) {
             clearInterval(gameLoopInterval);
             let winName = survivors.length === 1 ? survivors[0].name : "NOBODY";
-            alert(`ARCADE SESSION OVER! WINNER PILOT: ${winName}`);
+            alert(`ARCADE SESSION OVER! WINNER BOX: ${winName}`);
             exitToMenu();
         } else {
             startNextRoundLoop();
@@ -603,19 +596,18 @@ function processRoundCollapseSequence() {
 function eliminatePlayerProfileNode(player) {
     player.alive = false;
     player.element.style.transition = 'transform 1.1s, opacity 1.1s';
-    player.element.style.transform = 'scale(0) rotate(180deg) translateZ(-600px)';
+    player.element.style.transform = 'scale(0) rotateX(180deg) translateZ(-600px)';
     player.element.style.opacity = '0';
     totalAlivePlayers--;
 
     const container = document.getElementById('notification-area');
     const noticeNode = document.createElement('div');
     noticeNode.className = 'notif';
-    noticeNode.innerText = `${player.name} EXPLODED!`;
+    noticeNode.innerText = `${player.name} ELIMINATED!`;
     container.appendChild(noticeNode);
 
     if (player.id === localPlayerId) {
         document.getElementById('spectator-controls').classList.remove('hidden');
-        // If local player died, automatically cycle to an alive bot to watch camera movement
         spectateNextEntity();
     }
 }
@@ -627,7 +619,7 @@ function spectateNextEntity() {
     document.getElementById('spectator-msg').innerText = `FEED HACK: ${playersArray.find(p=>p.id===spectatingTargetId).name}`;
 }
 
-function updateAliveDisplayHUD() { document.getElementById('alive-counter').innerText = `SHIPS: ${totalAlivePlayers}/20`; }
+function updateAliveDisplayHUD() { document.getElementById('alive-counter').innerText = `BOXES: ${totalAlivePlayers}/20`; }
 
 function exitToMenu() {
     clearInterval(timerInterval); clearInterval(gameLoopInterval); clearInterval(matchmakingTimer);
