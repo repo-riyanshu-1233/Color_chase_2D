@@ -1,10 +1,11 @@
-/* CSS RESET & ORIENTATION LOCKED ENGINE RULES */
+/* RETRO ARCADE DRIVEN CORE INTERFACES */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: bold;
+    font-family: 'Press Start 2P', monospace;
     user-select: none;
     -webkit-user-select: none;
 }
@@ -12,8 +13,8 @@
 body, html {
     width: 100%;
     height: 100%;
-    background-color: #0c090f;
-    color: #dfd5ed;
+    background-color: #030205;
+    color: #00ffcc;
     overflow: hidden;
     position: fixed;
 }
@@ -21,11 +22,11 @@ body, html {
 .hidden { display: none !important; }
 .text-center { text-align: center !important; }
 
-/* Into The Breach High Fidelity Cyberpunk Overlays */
+/* Screen Cabinet Shell Overlays */
 .screen-overlay {
     position: absolute;
     top:0; left:0; width: 100%; height: 100%;
-    background: radial-gradient(circle at center, #1b1322 0%, #060408 100%);
+    background: radial-gradient(circle at center, #100a1c 0%, #020105 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,122 +36,168 @@ body, html {
 
 .menu-container {
     width: 100%;
-    max-width: 520px;
-    background: rgba(21, 16, 26, 0.98);
-    border: 4px solid #5a4b6e;
-    padding: 24px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.9);
+    max-width: 560px;
+    background: #0d081b;
+    border: 6px double #00ffcc;
+    padding: 26px;
+    box-shadow: 0 0 25px rgba(0, 255, 204, 0.2);
 }
 
 .game-title {
-    font-size: 2.2rem;
-    color: #dfd5ed;
-    text-shadow: 3px 3px #2d1836;
-    border-bottom: 4px solid #5a4b6e;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    letter-spacing: 2px;
+    font-size: 1.8rem;
+    color: #ff0055;
+    text-shadow: 4px 4px 0px #00ffff;
     text-align: center;
+    margin-bottom: 5px;
+    letter-spacing: -1px;
+}
+
+.arcade-subtext {
+    font-size: 0.65rem;
+    color: #ffeb3b;
+    text-align: center;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
 }
 
 .menu-options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .menu-btn {
-    background: #211926;
-    border: 2px solid #5a4b6e;
-    color: #baa9cc;
-    padding: 12px 16px;
-    font-size: 1rem;
+    background: #140d28;
+    border: 3px solid #ff0055;
+    color: #fff;
+    padding: 14px 16px;
+    font-size: 0.75rem;
     text-align: left;
     cursor: pointer;
-    transition: all 0.1s linear;
+    box-shadow: 4px 4px 0px #ff0055;
+    transition: all 0.05s ease-in;
 }
 
 .menu-btn:hover {
-    background: #5a4b6e;
+    background: #ff0055;
     color: #fff;
-    border-color: #9f86ba;
-    transform: translateX(4px);
+    box-shadow: 0px 0px 0px transparent;
+    transform: translate(4px, 4px);
 }
 
-.back-btn { background: #421818; border-color: #692424; color: #ff9e9e; margin-top: 15px; text-align: center; width: 100%; }
-.back-btn:hover { background: #692424; border-color: #9e3434; transform: none; }
+.back-btn { background: #400c1e; border-color: #ff0055; color: #ff9e9e; margin-top: 15px; text-align: center; width: 100%; box-shadow: 4px 4px 0px #400c1e;}
+.back-btn:hover { background: #610e2b; transform: none; box-shadow:none;}
 
-.action-btn { width: 100%; margin-top: 6px; text-align: center; background: #193626; border-color: #27543b; color: #91c2a5; }
-.action-btn:hover { background: #27543b; border-color: #408a61; transform: scale(1.01); }
+.action-btn { width: 100%; margin-top: 8px; text-align: center; background: #0c3e3b; border-color: #00ffcc; color: #fff; box-shadow: 4px 4px 0px #0c3e3b;}
+.action-btn:hover { background: #00ffcc; color:#000; box-shadow:none;}
 
 input[type="text"] {
     width: 100%;
-    padding: 12px;
-    background: #0d0912;
-    border: 2px solid #5a4b6e;
-    color: #00ffcc;
-    font-size: 1.05rem;
-    margin-bottom: 10px;
+    padding: 14px;
+    background: #040209;
+    border: 3px solid #00ffff;
+    color: #ffeb3b;
+    font-size: 0.8rem;
+    margin-bottom: 12px;
     outline: none;
     text-align: center;
+    font-family: 'Press Start 2P', monospace;
 }
 
-.or-divider { text-align: center; margin: 10px 0; color: #5a4b6e; font-size: 0.85rem; letter-spacing: 1px; }
-.profile-tag { margin-top: 25px; color: #6e5d80; font-size: 0.85rem; border-top: 2px dashed #32263d; padding-top: 10px;}
-.footer-credits { margin-top: 6px; color: #43394f; font-size: 0.7rem;}
+.or-divider { text-align: center; margin: 12px 0; color: #615282; font-size: 0.55rem; }
+.profile-tag { margin-top: 25px; color: #00ffff; font-size: 0.6rem; border-top: 3px dashed #1c1533; padding-top: 12px; text-align: center;}
+.footer-credits { margin-top: 8px; color: #43394f; font-size: 0.45rem; text-align: center;}
 
-/* Dynamic Status Elements */
+/* Neon Dynamic Loading Interfaces */
 .progress-container {
-    width: 100%; height: 14px; background: #0c090f; border: 2px solid #5a4b6e; margin: 15px 0; padding: 1px;
+    width: 100%; height: 16px; background: #040209; border: 3px solid #ff0055; margin: 15px 0; padding: 2px;
 }
-#lobby-progress-bar { width: 0%; height: 100%; background: #ff2a6d; transition: width 0.1s linear; }
+#lobby-progress-bar { width: 0%; height: 100%; background: #00ffcc; }
 
-.error-title { color: #ff2a6d; font-size: 1.8rem; margin-bottom: 10px; }
-.error-text { color: #caaed6; font-size: 0.95rem; line-height: 1.4; background: #1c1014; border: 2px solid #692424; padding: 12px; }
+.error-title { color: #ff0055; font-size: 1.2rem; margin-bottom: 10px; }
+.error-text { color: #fff; font-size: 0.6rem; line-height: 1.6; background: #210714; border: 3px solid #ff0055; padding: 12px; }
 
-/* Gameplay Map Core Canvas Architecture Setup */
-#game-screen { position: relative; width: 100%; height: 100%; background: #040305; }
+/* Map Canvas Wrapper & Viewport */
+#game-screen { position: relative; width: 100%; height: 100%; background: #020105; overflow: hidden;}
 #top-ui {
-    position: absolute; top: 0; left: 0; width: 100%; height: 50px;
-    background: rgba(10, 7, 13, 0.96); border-bottom: 3px solid #5a4b6e;
-    display: flex; justify-content: space-between; align-items: center; padding: 0 20px; z-index: 5;
+    position: absolute; top: 0; left: 0; width: 100%; height: 55px;
+    background: #0d081b; border-bottom: 4px solid #ff0055;
+    display: flex; justify-content: space-between; align-items: center; padding: 0 15px; z-index: 5;
 }
-#target-color-display { font-size: 1.15rem; color: #ffeb3b; }
-#timer-display { font-size: 1.5rem; color: #ff2a6d; }
-#alive-counter { font-size: 1rem; color: #00ffcc; }
+#target-color-display { font-size: 0.65rem; color: #ffeb3b; text-shadow: 2px 2px #000; }
+#timer-display { font-size: 1.1rem; color: #ff0055; }
+#alive-counter { font-size: 0.6rem; color: #00ffcc; }
 
-#notification-area { position: absolute; top: 60px; right: 20px; width: 240px; display: flex; flex-direction: column; gap: 5px; z-index: 5; }
-.notif { background: rgba(140, 20, 50, 0.9); border-left: 4px solid #ff2a6d; padding: 6px 10px; font-size: 0.8rem; color: white; animation: slideOutFade 3s forwards; }
+#notification-area { position: absolute; top: 70px; right: 15px; width: 260px; display: flex; flex-direction: column; gap: 6px; z-index: 5; }
+.notif { background: #ff0055; border: 2px solid #fff; padding: 6px 10px; font-size: 0.45rem; color: white; animation: slideOutFade 2.5s forwards; }
 
-/* Pseudo-3D Angle Transformation Matrices Configuration */
-#stage-wrapper { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; perspective: 1000px; }
+/* 3D Dynamic Changing Perspective Matrix */
+#stage-wrapper { 
+    width: 100%; height: 100%; 
+    display: flex; justify-content: center; align-items: center; 
+    perspective: 900px;
+    overflow: hidden;
+}
 #game-map {
-    position: relative; width: 800px; height: 800px; background: #110e17; border: 8px solid #413552;
-    transform: rotateX(50deg); transform-style: preserve-3d;
+    position: relative; width: 800px; height: 800px; background: #0a0615; border: 10px solid #ff0055;
+    transform-style: preserve-3d;
+    box-shadow: 0 0 50px rgba(255, 0, 85, 0.3);
+    /* Basic start transformation overridden dynamically by JS */
+    transform: rotateX(55deg) rotateZ(0deg); 
+    will-change: transform;
 }
 
-.tile { position: absolute; width: 76px; height: 76px; border: 2px solid #1e1726; background-color: #4c4654; }
-.tile.falling { transform: translateZ(-700px); opacity: 0; transition: transform 0.8s ease-in, opacity 0.8s; }
+.tile { position: absolute; width: 76px; height: 76px; border: 2px solid #140d26; background-color: #221a36; }
+.tile.falling { transform: translateZ(-800px) rotateY(90deg); opacity: 0; transition: transform 0.9s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.9s; }
 
-/* Player Nodes Styles */
-.entity { position: absolute; width: 26px; height: 26px; border-radius: 50%; transform: translateZ(12px); transform-style: preserve-3d; }
-.entity.bot { background: #ff2a6d; border: 1px solid #ff0055; }
-.entity.local-player { background: #00ffcc; border: 2px solid #fff; box-shadow: 0 0 14px #00ffcc; }
-.entity.peer-player { background: #ffea00; border: 2px solid #fff; box-shadow: 0 0 14px #ffea00; }
+/* Advanced Custom Spaceship Retro Character Model CSS */
+.entity { 
+    position: absolute; 
+    width: 32px; height: 32px; 
+    transform-style: preserve-3d;
+    will-change: left, top, transform;
+}
+
+/* Character Body Shell (Pixel-Art Wing Transformation Mockup) */
+.entity::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px; width: 20px; height: 20px;
+    background: inherit;
+    border-radius: 2px;
+    clip-path: polygon(50% 0%, 100% 100%, 80% 80%, 20% 80%, 0% 100%);
+    box-shadow: 0 -4px 10px inherit;
+}
+
+/* Mini Jet-Engine Thruster Flame Tail Layer */
+.entity::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 12px; width: 8px; height: 8px;
+    background: #ffeb3b;
+    clip-path: polygon(50% 100%, 0 0, 100% 0);
+    animation: jetFlameToggle 0.1s infinite alternate;
+}
+
+.entity.bot { background: #ff0055; border: 1px solid #ff9e9e; box-shadow: 0 0 10px #ff0055; }
+.entity.local-player { background: #00ffcc; border: 1px solid #ffffff; box-shadow: 0 0 15px #00ffcc; }
+.entity.peer-player { background: #ffea00; border: 1px solid #ffffff; box-shadow: 0 0 15px #ffea00; }
 
 .entity-name {
-    position: absolute; top: -24px; left: 50%; transform: translateX(-50%) rotateX(-50deg);
-    background: rgba(4, 3, 5, 0.9); border: 1px solid #5a4b6e; color: #fff; padding: 2px 5px; font-size: 9px; white-space: nowrap;
+    position: absolute; top: -28px; left: 50%; transform: translateX(-50%) rotateX(-55deg);
+    background: #000; border: 2px solid inherit; color: #fff; padding: 3px 6px; font-size: 6px; white-space: nowrap;
+    letter-spacing: 0px;
 }
 
-/* Touch UI Overlay HUD Layout */
-#mobile-controls { position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 30px; z-index: 6; pointer-events: none; }
-#joystick-zone { width: 100px; height: 100px; background: rgba(255,255,255,0.05); border: 2px solid #5a4b6e; border-radius: 50%; position: relative; pointer-events: auto; }
-#joystick-knob { width: 36px; height: 36px; background: #5a4b6e; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-#jump-btn { width: 75px; height: 75px; background: #34527d; border: 2px solid #5179b0; border-radius: 50%; color: white; font-size: 0.9rem; cursor: pointer; pointer-events: auto; }
+/* Fixed Non-stuck Mobile Controller Zones Layout */
+#mobile-controls { position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 40px; z-index: 6; pointer-events: none; }
+#joystick-zone { width: 110px; height: 110px; background: rgba(13, 8, 27, 0.85); border: 4px solid #00ffcc; border-radius: 50%; position: relative; pointer-events: auto; box-shadow: 0 0 15px rgba(0,255,204,0.2); }
+#joystick-knob { width: 38px; height: 38px; background: #ff0055; border: 2px solid #fff; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+#jump-btn { width: 80px; height: 80px; background: #140d28; border: 4px solid #ff0055; border-radius: 50%; color: white; font-size: 0.55rem; cursor: pointer; pointer-events: auto; box-shadow: 0 0 12px rgba(255,0,85,0.4); font-family: 'Press Start 2P', monospace;}
 
-#spectator-controls { position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%); background: rgba(14, 10, 18, 0.96); border: 2px solid #692424; padding: 12px 20px; text-align: center; z-index: 7; }
-.spec-btn { background: #211926; border: 2px solid #5a4b6e; color: #fff; padding: 6px 12px; font-size: 0.85rem; cursor: pointer; }
-.spec-btn.exit-spec { background: #421818; border-color: #692424; }
+#spectator-controls { position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%); background: #0d081b; border: 4px solid #ff0055; padding: 12px 20px; text-align: center; z-index: 7; }
+.spec-btn { background: #140d28; border: 2px solid #00ffcc; color: #fff; padding: 8px 12px; font-size: 0.5rem; cursor: pointer; font-family: 'Press Start 2P', monospace;}
+.spec-btn.exit-spec { background: #400c1e; border-color: #ff0055; }
 
-@keyframes slideOutFade { 90% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-15px); } }
+@keyframes slideOutFade { 85% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-20px); } }
+@keyframes jetFlameToggle { 0% { transform: scaleY(0.7); background: #ff5722; } 100% { transform: scaleY(1.3); background: #ffeb3b; } }
