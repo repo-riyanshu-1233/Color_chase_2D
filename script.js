@@ -28,36 +28,54 @@ let isRoundActive = false;
 let totalAlivePlayers = 20;
 let spectatingTargetId = localPlayerId;
 
-// Map Smooth LERP Cam Tracking States
-let targetCamAngleX = 55;
-let targetCamAngleZ = 0;
-let currentCamAngleX = 55;
-let currentCamAngleZ = 0;
+// ====== PINCH TO ZOOM & MULTI-TOUCH SCALE CAMERA PRESETS ======
+let mapRenderScale = 0.85; // Initial view size ratio
+let initialTouchDist = null;
+
+// Camera view angles locked at 180 degrees perspective look
+let currentCamAngleX = 60; // Slanted pitch to observe the true 3D shapes height beautifully
+let currentCamAngleZ = 180; // 180 Degree Orientation Angle Locked
 
 const COLORS_POOL = ['#f44336', '#3f51b5', '#4caf50', '#ffeb3b', '#9c27b0', '#ff9800'];
 const COLOR_NAMES = { '#f44336': 'RED', '#3f51b5': 'BLUE', '#4caf50': 'GREEN', '#ffeb3b': 'YELLOW', '#9c27b0': 'PURPLE', '#ff9800': 'ORANGE' };
 
-// Direct Screen Switching Framework without start notice popups
+// Direct Screen Switching Framework 
 function triggerModeSelection(targetScreenId, modeContext = '') {
     let docEl = document.documentElement;
     if (docEl.requestFullscreen) { docEl.requestFullscreen(); }
     else if (docEl.webkitRequestFullscreen) { docEl.webkitRequestFullscreen(); }
     
     if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(() => console.log("Landscape locked dynamically"));
+        screen.orientation.lock('landscape').catch(() => console.log("Landscape locked."));
     }
-    showScreen(targetScreenId, modeContext);
-}
-
-function showScreen(screenId, modeContext = '') {
-    document.querySelectorAll('.screen-overlay, #game-screen').forEach(el => el.classList.add('hidden'));
-    document.getElementById(screenId).classList.remove('hidden');
     
     if (modeContext) {
         currentGameMode = modeContext;
         document.getElementById('friend-options').classList.toggle('hidden', modeContext !== 'friend');
         document.getElementById('start-matchmaking-btn').classList.toggle('hidden', modeContext !== 'pvp');
     }
+    showScreen(targetScreenId);
+}
+
+function showScreen(screenId) {
+    document.querySelectorAll('.screen-overlay, #game-screen').forEach(el => el.classList.add('hidden'));
+    document.getElementById(screenId).classList.remove('hidden');
+}
+
+// ==========================================
+// IN-GAME NOTIFICATIONS POPUP OVERRIDE BANNER
+// ==========================================
+function triggerInGameAlert(messageTxt, durationMs = 2500) {
+    const banner = document.getElementById('game-alert-banner');
+    const textNode = document.getElementById('game-alert-text');
+    if (!banner || !textNode) return;
+    
+    textNode.innerHTML = messageTxt;
+    banner.classList.remove('hidden');
+    
+    setTimeout(() => {
+        banner.classList.add('hidden');
+    }, durationMs);
 }
 
 // ==========================================
@@ -172,17 +190,19 @@ function startMatchmakingLoop() {
 }
 
 function retryMatchmaking() { startMatchmakingLoop(); }
-function startAIMode(diff) { aiDifficulty = diff; localPlayerName = "RIYANSHU (YOU)"; initGameEngine(); }
+function startAIMode(diff) { aiDifficulty = diff; localPlayerName = "RIYANSHU"; initGameEngine(); }
 
 // ==========================================
 // GRID GENERATOR & PLAYER INJECTION ARCHITECTURE
 // ==========================================
 function initGameEngine() {
     showScreen('game-screen');
+    document.getElementById('game-end-overlay').classList.add('hidden');
+    document.getElementById('game-alert-banner').classList.add('hidden');
+    
     const map = document.getElementById('game-map');
     map.innerHTML = ''; tilesData = []; playersArray = []; totalAlivePlayers = 20; spectatingTargetId = localPlayerId;
-    currentCamAngleX = 55; currentCamAngleZ = 0; targetCamAngleX = 55; targetCamAngleZ = 0;
-    document.getElementById('spectator-controls').classList.add('hidden');
+    mapRenderScale = 0.85;
 
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
@@ -207,22 +227,67 @@ function initGameEngine() {
     }
 
     updateAliveDisplayHUD();
-
-    // Reset directions state securely
     moveDirectionsState = { up: false, down: false, left: false, right: false };
+    setupPinchToZoomListeners();
 
     if (gameLoopInterval) clearInterval(gameLoopInterval);
     gameLoopInterval = setInterval(runEnginePhysicsTick, 1000 / 60);
 
-    if (currentGameMode !== 'friend' || isHostInstance) startNextRoundLoop();
+    triggerInGameAlert("<span style='color:#ffff00; font-size:1.3rem;'>MATCH STARTING!</span><br>GET READY TO RUN!");
+
+    setTimeout(() => {
+        if (currentGameMode !== 'friend' || isHostInstance) startNextRoundLoop();
+    }, 2500);
 }
 
+// CREATES TRUE 3D CUBES SKELETON WITH SIDES FACES Instead of 2D box flats
 function createEntityNode(name, variantClass) {
     const map = document.getElementById('game-map');
     const node = document.createElement('div'); node.className = `entity ${variantClass}`;
+    
+    // Inject 3D cube face nodes layers
+    const faces = ['front', 'back', 'left', 'right', 'top', 'bottom'];
+    faces.forEach(f => {
+        let fNode = document.createElement('div');
+        fNode.className = `cube-face face-${f}`;
+        node.appendChild(fNode);
+    });
+
     const label = document.createElement('div'); label.className = 'entity-name'; label.innerText = name;
     node.appendChild(label); map.appendChild(node);
     return node;
+}
+
+// ==========================================
+// PINCH TO ZOOM MULTI-TOUCH DETECTOR SYSTEM
+// ==========================================
+function setupPinchToZoomListeners() {
+    const wrapper = document.getElementById('stage-wrapper');
+    
+    wrapper.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            initialTouchDist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+        }
+    }, { passive: true });
+
+    wrapper.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2 && initialTouchDist !== null) {
+            let currentDist = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            let diff = currentDist / initialTouchDist;
+            
+            // Adjust scaling logic bound constraints safely
+            mapRenderScale = Math.max(0.45, Math.min(1.6, mapRenderScale * (diff - 1 * 0.05 + 1)));
+            initialTouchDist = currentDist;
+        }
+    }, { passive: true });
+
+    wrapper.addEventListener('touchend', () => { initialTouchDist = null; }, { passive: true });
 }
 
 // ==========================================
@@ -230,11 +295,8 @@ function createEntityNode(name, variantClass) {
 // ==========================================
 let moveDirectionsState = { up: false, down: false, left: false, right: false };
 
-// Fixed high-performance continuous touch registrar
 function handleButtonTouch(e, direction, isActive) {
-    if (e) {
-        e.preventDefault(); // Mobile browsers default browser scrolling halt karta hai
-    }
+    if (e) { e.preventDefault(); }
     if (moveDirectionsState.hasOwnProperty(direction)) {
         moveDirectionsState[direction] = isActive;
     }
@@ -245,14 +307,13 @@ function handleJumpTouch(e) {
     triggerLocalPlayerJump();
 }
 
-// Keyboard Hardware Button Hooks (Dono mobile button aur computer buttons side by side chalenge)
 let keyboardKeyMap = { 'w': 'up', 'arrowup': 'up', 's': 'down', 'arrowdown': 'down', 'a': 'left', 'arrowleft': 'left', 'd': 'right', 'arrowright': 'right' };
 window.onkeydown = (e) => { let d = keyboardKeyMap[e.key.toLowerCase()]; if(d) moveDirectionsState[d] = true; if(e.key === ' ') triggerLocalPlayerJump(); };
 window.onkeyup = (e) => { let d = keyboardKeyMap[e.key.toLowerCase()]; if(d) moveDirectionsState[d] = false; };
 
 function triggerLocalPlayerJump() {
     let hero = playersArray.find(p => p.id === localPlayerId);
-    if (hero && hero.alive && hero.z === 0) hero.z = 16;
+    if (hero && hero.alive && hero.z === 0) hero.z = 18; // Height matching updated 3D space dimensions scale
 }
 
 // ==========================================
@@ -278,25 +339,17 @@ function runEnginePhysicsTick() {
         }
     }
 
-    // MAP DYNAMIC ROTATION MATHEMATICS (DYNAMIC CAMERA POSITION)
+    // ====== 180 DEGREE FIXED PLAYER TRACKING CAMERA MATHEMATICS ======
     let targetSubject = playersArray.find(p => p.id === spectatingTargetId);
-    if (targetSubject && targetSubject.alive) {
-        let normX = (targetSubject.x - 400) / 400; 
-        let normY = (targetSubject.y - 400) / 400; 
-        targetCamAngleX = 54 + (normY * 12); 
-        targetCamAngleZ = -(normX * 22); 
-    } else {
-        targetCamAngleX = 55; targetCamAngleZ = 0;
+    let camRig = document.getElementById('camera-rig');
+    
+    if (targetSubject && targetSubject.alive && camRig) {
+        // Shift camera rig coordinates exactly on inverse of targeted player offsets coordinates 
+        // 180 degree rotation gives real-time forward chase feel
+        camRig.style.transform = `scale3d(${mapRenderScale}, ${mapRenderScale}, ${mapRenderScale}) rotateX(${currentCamAngleX}deg) rotateZ(${currentCamAngleZ}deg) translate3d(${-targetSubject.x}px, ${-targetSubject.y}px, ${-targetSubject.z}px)`;
     }
 
-    // Camera Interpolation LERP
-    currentCamAngleX += (targetCamAngleX - currentCamAngleX) * 0.08;
-    currentCamAngleZ += (targetCamAngleZ - currentCamAngleZ) * 0.08;
-
-    let mapNode = document.getElementById('game-map');
-    if (mapNode) mapNode.style.transform = `rotateX(${currentCamAngleX}deg) rotateZ(${currentCamAngleZ}deg)`;
-
-    // Process Character Height Jumps & Bot Decisions
+    // Process Character Heights & Bot Decisions
     playersArray.forEach(p => {
         if (!p.alive) return;
 
@@ -306,12 +359,13 @@ function runEnginePhysicsTick() {
             executeAdvancedBotAIPhysics(p);
         }
 
+        // Apply positions variables dynamically onto 3D transformations matrices layers
         p.element.style.left = `${p.x}px`;
         p.element.style.top = `${p.y}px`;
-        p.element.style.transform = `translateZ(${14 + p.z}px)`;
+        p.element.style.transform = `translateZ(${p.z}px)`;
 
-        let col = Math.floor((p.x + 16) / TILE_DIM);
-        let row = Math.floor((p.y + 16) / TILE_DIM);
+        let col = Math.floor((p.x + 18) / TILE_DIM);
+        let row = Math.floor((p.y + 18) / TILE_DIM);
         let currentTile = tilesData.find(t => t.id === `t_${row}_${col}`);
 
         if (currentTile && isRoundActive && currentTile.color === currentRoundColor && p.z === 0) {
@@ -347,8 +401,10 @@ function executeAdvancedBotAIPhysics(bot) {
 // ==========================================
 function startNextRoundLoop() {
     isRoundActive = false; currentRoundColor = '';
-    document.getElementById('target-color-display').innerText = "ROLLING BOARD GAME TILES...";
+    document.getElementById('target-color-display').innerText = "ROLLING TILES...";
     document.getElementById('target-color-display').style.color = '#ffffff';
+
+    triggerInGameAlert("<span style='color:#00ffcc;'>SHUFFLING BOARD GRID...</span><br>LOOK AT THE TOP LIGHT DISPLAY!");
 
     tilesData.forEach(t => {
         t.color = '#2d1e47'; t.capturedBy = null; t.element.className = 'tile';
@@ -390,9 +446,13 @@ function applyForcedServerTileLayout(layoutData) {
 
 function executeNetworkRoundTimerStart() {
     isRoundActive = true; gameTimer = 20;
-    document.getElementById('target-color-display').innerText = `RUN TO: ${COLOR_NAMES[currentRoundColor]}!`;
+    let targetName = COLOR_NAMES[currentRoundColor];
+    
+    document.getElementById('target-color-display').innerText = `RUN TO: ${targetName}!`;
     document.getElementById('target-color-display').style.color = currentRoundColor;
     document.getElementById('timer-display').innerText = `${gameTimer}s`;
+
+    triggerInGameAlert(`RUN TO <span style='color:${currentRoundColor}; font-size:1.4rem;'>${targetName}</span> TILE!<br>AND CAPTURE IT BEFORE THE CLOCK HITS ZERO!`, 2000);
 
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -406,13 +466,15 @@ function executeNetworkRoundTimerStart() {
 
 function processRoundCollapseSequence() {
     isRoundActive = false;
+    triggerInGameAlert("<span style='color:#ff3333; font-size:1.3rem;'>TIME UP!</span><br>COLLAPSING BOARD TILES LAYER...");
+
     tilesData.forEach(t => { if (t.color !== currentRoundColor || t.capturedBy === null) t.element.classList.add('falling'); });
 
     setTimeout(() => {
         playersArray.forEach(p => {
             if (!p.alive) return;
-            let col = Math.floor((p.x + 16) / TILE_DIM);
-            let row = Math.floor((p.y + 16) / TILE_DIM);
+            let col = Math.floor((p.x + 18) / TILE_DIM);
+            let row = Math.floor((p.y + 18) / TILE_DIM);
             let tile = tilesData.find(t => t.id === `t_${row}_${col}`);
 
             if (!tile || tile.color !== currentRoundColor || tile.capturedBy !== p.id) {
@@ -426,21 +488,49 @@ function processRoundCollapseSequence() {
         updateAliveDisplayHUD();
         let survivors = playersArray.filter(p => p.alive);
         
+        // ====== NEW DESIGNED IN-GAME VICTORY / DEFEAT GAME OVER LEADERBOARD SYSTEM ======
+        let hero = playersArray.find(p => p.id === localPlayerId);
+        
+        if (!hero.alive) {
+            clearInterval(gameLoopInterval);
+            triggerGameOverScreen(false, "YOU WERE ELIMINATED FROM THE PLATFORM!");
+            return;
+        }
+
         if (survivors.length <= 1) {
             clearInterval(gameLoopInterval);
-            let winName = survivors.length === 1 ? survivors[0].name : "NOBODY";
-            alert(`MATCH OVER! WINNER IS: ${winName}`);
-            exitToMenu();
+            if (survivors.length === 1 && survivors[0].id === localPlayerId) {
+                triggerGameOverScreen(true, "CONGRATULATIONS! YOU ARE THE LAST SURVIVOR!");
+            } else {
+                triggerGameOverScreen(false, "MATCH OVER! BOTS OUTLASTED YOU.");
+            }
         } else {
             startNextRoundLoop();
         }
     }, 1200);
 }
 
+// IN-GAME DYNAMIC VICTORY / LOSS ENGINE VISUAL SYSTEM SWITCH
+function triggerGameOverScreen(isVictory, subtitleText) {
+    clearInterval(timerInterval);
+    clearInterval(gameLoopInterval);
+    
+    const screenOverlay = document.getElementById('game-end-overlay');
+    const cardBox = document.getElementById('end-card-box');
+    const title = document.getElementById('end-title-text');
+    const subtitle = document.getElementById('end-subtitle-text');
+    
+    title.innerText = isVictory ? "VICTORY" : "GAME OVER";
+    subtitle.innerText = subtitleText.toUpperCase();
+    
+    cardBox.className = "menu-container text-center " + (isVictory ? "victory-theme" : "defeat-theme");
+    screenOverlay.classList.remove('hidden');
+}
+
 function eliminatePlayerProfileNode(player) {
     player.alive = false;
     player.element.style.transition = 'transform 1s, opacity 1s';
-    player.element.style.transform = 'scale(0) translateZ(-500px)';
+    player.element.style.transform = 'scale3d(0,0,0) translateZ(-600px)';
     player.element.style.opacity = '0';
     totalAlivePlayers--;
 
@@ -454,7 +544,6 @@ function eliminatePlayerProfileNode(player) {
     }
 }
 
-// Safe global window-level release hook agar touch screen se baahar slip ho jaaye to player instantly ruk jaaye
 window.addEventListener('pointerup', () => {
     moveDirectionsState = { up: false, down: false, left: false, right: false };
 });
@@ -474,5 +563,6 @@ function updateAliveDisplayHUD() { document.getElementById('alive-counter').inne
 function exitToMenu() {
     clearInterval(timerInterval); clearInterval(gameLoopInterval); clearInterval(matchmakingTimer);
     document.getElementById('spectator-controls').classList.add('hidden');
+    document.getElementById('game-end-overlay').classList.add('hidden');
     showScreen('main-menu');
 }
