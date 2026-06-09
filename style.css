@@ -1,4 +1,4 @@
-/* RETRO ARCADE DRIVEN CORE INTERFACES */
+/* RETRO ARCADE BOARD GAME LAYOUT ENGINE Rules */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 * {
@@ -26,7 +26,7 @@ body, html {
 .screen-overlay {
     position: absolute;
     top:0; left:0; width: 100%; height: 100%;
-    background: radial-gradient(circle at center, #100a1c 0%, #020105 100%);
+    background: radial-gradient(circle at center, #150e26 0%, #020106 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,7 +37,7 @@ body, html {
 .menu-container {
     width: 100%;
     max-width: 560px;
-    background: #0d081b;
+    background: #0e071e;
     border: 6px double #00ffcc;
     padding: 26px;
     box-shadow: 0 0 25px rgba(0, 255, 204, 0.2);
@@ -118,10 +118,10 @@ input[type="text"] {
 .error-text { color: #fff; font-size: 0.6rem; line-height: 1.6; background: #210714; border: 3px solid #ff0055; padding: 12px; }
 
 /* Map Canvas Wrapper & Viewport */
-#game-screen { position: relative; width: 100%; height: 100%; background: #020105; overflow: hidden;}
+#game-screen { position: relative; width: 100%; height: 100%; background: #05030a; overflow: hidden;}
 #top-ui {
     position: absolute; top: 0; left: 0; width: 100%; height: 55px;
-    background: #0d081b; border-bottom: 4px solid #ff0055;
+    background: #0e071e; border-bottom: 4px solid #ff0055;
     display: flex; justify-content: space-between; align-items: center; padding: 0 15px; z-index: 5;
 }
 #target-color-display { font-size: 0.65rem; color: #ffeb3b; text-shadow: 2px 2px #000; }
@@ -135,69 +135,60 @@ input[type="text"] {
 #stage-wrapper { 
     width: 100%; height: 100%; 
     display: flex; justify-content: center; align-items: center; 
-    perspective: 900px;
+    perspective: 950px;
     overflow: hidden;
+    /* Traditional Retro Tabletop Arcade Board Underlay */
+    background: linear-gradient(rgba(18, 10, 36, 0.4) 2px, transparent 2px), linear-gradient(90deg, rgba(18, 10, 36, 0.4) 2px, transparent 2px);
+    background-size: 40px 40px;
 }
+
+/* ARCADE CHUNKY BOARD LAYOUT BUILD */
 #game-map {
-    position: relative; width: 800px; height: 800px; background: #0a0615; border: 10px solid #ff0055;
+    position: relative; width: 800px; height: 800px; 
+    background-color: #160f29; 
+    /* Heavy Wooden Finish Retro Board Borders */
+    border: 14px solid #4a2b11;
+    outline: 4px solid #ffea00;
+    box-shadow: 0 0 0 6px #000, 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.6);
     transform-style: preserve-3d;
-    box-shadow: 0 0 50px rgba(255, 0, 85, 0.3);
-    /* Basic start transformation overridden dynamically by JS */
-    transform: rotateX(55deg) rotateZ(0deg); 
     will-change: transform;
 }
 
-.tile { position: absolute; width: 76px; height: 76px; border: 2px solid #140d26; background-color: #221a36; }
-.tile.falling { transform: translateZ(-800px) rotateY(90deg); opacity: 0; transition: transform 0.9s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.9s; }
+.tile { position: absolute; width: 76px; height: 76px; border: 4px solid #0e071e; background-color: #251b3d; transition: background-color 0.2s; }
+.tile.falling { transform: translateZ(-800px) rotateX(45deg); opacity: 0; transition: transform 0.9s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.9s; }
 
-/* Advanced Custom Spaceship Retro Character Model CSS */
+/* RETRO arcade CHUNKY BOX CHARACTER DESIGNS */
 .entity { 
     position: absolute; 
-    width: 32px; height: 32px; 
+    width: 34px; height: 34px; 
     transform-style: preserve-3d;
     will-change: left, top, transform;
 }
 
-/* Character Body Shell (Pixel-Art Wing Transformation Mockup) */
+/* 3D Box Facade Injection Modules */
 .entity::before {
     content: '';
     position: absolute;
-    top: 6px; left: 6px; width: 20px; height: 20px;
+    width: 100%; height: 100%;
     background: inherit;
-    border-radius: 2px;
-    clip-path: polygon(50% 0%, 100% 100%, 80% 80%, 20% 80%, 0% 100%);
-    box-shadow: 0 -4px 10px inherit;
+    border: 3px solid #ffffff;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
 }
 
-/* Mini Jet-Engine Thruster Flame Tail Layer */
-.entity::after {
-    content: '';
-    position: absolute;
-    bottom: -6px; left: 12px; width: 8px; height: 8px;
-    background: #ffeb3b;
-    clip-path: polygon(50% 100%, 0 0, 100% 0);
-    animation: jetFlameToggle 0.1s infinite alternate;
-}
-
-.entity.bot { background: #ff0055; border: 1px solid #ff9e9e; box-shadow: 0 0 10px #ff0055; }
-.entity.local-player { background: #00ffcc; border: 1px solid #ffffff; box-shadow: 0 0 15px #00ffcc; }
-.entity.peer-player { background: #ffea00; border: 1px solid #ffffff; box-shadow: 0 0 15px #ffea00; }
+.entity.bot { background: #ff0055; box-shadow: 0 0 14px #ff0055; }
+.entity.local-player { background: #00ffcc; box-shadow: 0 0 20px #00ffcc; }
+.entity.peer-player { background: #ffea00; box-shadow: 0 0 20px #ffea00; }
 
 .entity-name {
     position: absolute; top: -28px; left: 50%; transform: translateX(-50%) rotateX(-55deg);
-    background: #000; border: 2px solid inherit; color: #fff; padding: 3px 6px; font-size: 6px; white-space: nowrap;
-    letter-spacing: 0px;
+    background: #000; border: 2px solid #fff; color: #fff; padding: 3px 6px; font-size: 6px; white-space: nowrap;
 }
 
-/* Fixed Non-stuck Mobile Controller Zones Layout */
+/* Anti-stuck Precision Control Deck HUD */
 #mobile-controls { position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 40px; z-index: 6; pointer-events: none; }
-#joystick-zone { width: 110px; height: 110px; background: rgba(13, 8, 27, 0.85); border: 4px solid #00ffcc; border-radius: 50%; position: relative; pointer-events: auto; box-shadow: 0 0 15px rgba(0,255,204,0.2); }
-#joystick-knob { width: 38px; height: 38px; background: #ff0055; border: 2px solid #fff; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-#jump-btn { width: 80px; height: 80px; background: #140d28; border: 4px solid #ff0055; border-radius: 50%; color: white; font-size: 0.55rem; cursor: pointer; pointer-events: auto; box-shadow: 0 0 12px rgba(255,0,85,0.4); font-family: 'Press Start 2P', monospace;}
+#joystick-zone { width: 115px; height: 115px; background: rgba(14, 7, 30, 0.9); border: 4px solid #00ffcc; border-radius: 50%; position: relative; pointer-events: auto; box-shadow: 0 0 15px rgba(0,255,204,0.3); }
+#joystick-knob { width: 40px; height: 40px; background: #ff0055; border: 3px solid #fff; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+#jump-btn { width: 85px; height: 85px; background: #140d28; border: 4px solid #ff0055; border-radius: 50%; color: white; font-size: 0.55rem; cursor: pointer; pointer-events: auto; box-shadow: 0 0 12px rgba(255,0,85,0.4); font-family: 'Press Start 2P', monospace;}
 
 #spectator-controls { position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%); background: #0d081b; border: 4px solid #ff0055; padding: 12px 20px; text-align: center; z-index: 7; }
-.spec-btn { background: #140d28; border: 2px solid #00ffcc; color: #fff; padding: 8px 12px; font-size: 0.5rem; cursor: pointer; font-family: 'Press Start 2P', monospace;}
-.spec-btn.exit-spec { background: #400c1e; border-color: #ff0055; }
-
-@keyframes slideOutFade { 85% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-20px); } }
-@keyframes jetFlameToggle { 0% { transform: scaleY(0.7); background: #ff5722; } 100% { transform: scaleY(1.3); background: #ffeb3b; } }
+.spec-btn { background: #140d28; border: 2px solid #
