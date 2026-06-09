@@ -21,7 +21,7 @@
             </div>
             
             <div class="profile-tag">PLAYER NAME: RIYANSHU</div>
-            <div class="footer-credits">OLD RETRO ARCADE ENGINE V2.0</div>
+            <div class="footer-credits">OLD RETRO ARCADE ENGINE V3.0</div>
         </div>
     </div>
 
@@ -90,8 +90,22 @@
 
         <div id="notification-area"></div>
 
+        <div id="game-alert-banner" class="hidden">
+            <div id="game-alert-text">ROUND STARTING...</div>
+        </div>
+
+        <div id="game-end-overlay" class="screen-overlay hidden" style="background: rgba(12, 7, 20, 0.95); z-index: 20;">
+            <div class="menu-container text-center" id="end-card-box">
+                <h1 id="end-title-text">VICTORY</h1>
+                <p id="end-subtitle-text" style="font-size: 0.7rem; margin: 15px 0; color: #fff;"></p>
+                <button class="menu-btn action-btn" onclick="exitToMenu()" style="background:#ffaa00; color:#000; font-weight:bold;">RETURN TO MAIN MENU</button>
+            </div>
+        </div>
+
         <div id="stage-wrapper">
-            <div id="game-map"></div>
+            <div id="camera-rig">
+                <div id="game-map"></div>
+            </div>
         </div>
 
         <div id="spectator-controls" class="hidden">
