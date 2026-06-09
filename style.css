@@ -1,4 +1,4 @@
-/* RETRO ARCADE BOARD GAME LAYOUT ENGINE Rules */
+/* CLASSIC OLD RETRO ARCADE STYLE STYLING */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 * {
@@ -13,7 +13,7 @@
 body, html {
     width: 100%;
     height: 100%;
-    background-color: #030205;
+    background-color: #110b1a;
     color: #00ffcc;
     overflow: hidden;
     position: fixed;
@@ -22,11 +22,11 @@ body, html {
 .hidden { display: none !important; }
 .text-center { text-align: center !important; }
 
-/* Screen Cabinet Shell Overlays */
+/* Normal Menu Screens Overlay */
 .screen-overlay {
     position: absolute;
     top:0; left:0; width: 100%; height: 100%;
-    background: radial-gradient(circle at center, #150e26 0%, #020106 100%);
+    background: radial-gradient(circle at center, #241635 0%, #0c0714 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,28 +36,27 @@ body, html {
 
 .menu-container {
     width: 100%;
-    max-width: 560px;
-    background: #0e071e;
-    border: 6px double #00ffcc;
+    max-width: 540px;
+    background: #190f26;
+    border: 6px solid #ffaa00;
     padding: 26px;
-    box-shadow: 0 0 25px rgba(0, 255, 204, 0.2);
+    box-shadow: 0 10px 0px #000;
 }
 
 .game-title {
     font-size: 1.8rem;
-    color: #ff0055;
-    text-shadow: 4px 4px 0px #00ffff;
+    color: #ffff00;
+    text-shadow: 4px 4px 0px #ff0000;
     text-align: center;
     margin-bottom: 5px;
-    letter-spacing: -1px;
 }
 
 .arcade-subtext {
-    font-size: 0.65rem;
-    color: #ffeb3b;
+    font-size: 0.7rem;
+    color: #ffffff;
     text-align: center;
     margin-bottom: 25px;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 .menu-options {
@@ -67,36 +66,30 @@ body, html {
 }
 
 .menu-btn {
-    background: #140d28;
-    border: 3px solid #ff0055;
+    background: #291a3a;
+    border: 3px solid #ffff00;
     color: #fff;
     padding: 14px 16px;
     font-size: 0.75rem;
-    text-align: left;
+    text-align: center;
     cursor: pointer;
-    box-shadow: 4px 4px 0px #ff0055;
-    transition: all 0.05s ease-in;
+    box-shadow: 4px 4px 0px #000;
 }
 
 .menu-btn:hover {
-    background: #ff0055;
-    color: #fff;
-    box-shadow: 0px 0px 0px transparent;
-    transform: translate(4px, 4px);
+    background: #ffff00;
+    color: #000;
 }
 
-.back-btn { background: #400c1e; border-color: #ff0055; color: #ff9e9e; margin-top: 15px; text-align: center; width: 100%; box-shadow: 4px 4px 0px #400c1e;}
-.back-btn:hover { background: #610e2b; transform: none; box-shadow:none;}
-
-.action-btn { width: 100%; margin-top: 8px; text-align: center; background: #0c3e3b; border-color: #00ffcc; color: #fff; box-shadow: 4px 4px 0px #0c3e3b;}
-.action-btn:hover { background: #00ffcc; color:#000; box-shadow:none;}
+.back-btn { background: #5a1111; border-color: #ff5555; color: #fff; margin-top: 15px; text-align: center; width: 100%; }
+.action-btn { width: 100%; margin-top: 8px; text-align: center; background: #115324; border-color: #00ff55; color: #fff; }
 
 input[type="text"] {
     width: 100%;
     padding: 14px;
-    background: #040209;
-    border: 3px solid #00ffff;
-    color: #ffeb3b;
+    background: #000;
+    border: 3px solid #ffff00;
+    color: #00ffcc;
     font-size: 0.8rem;
     margin-bottom: 12px;
     outline: none;
@@ -104,91 +97,115 @@ input[type="text"] {
     font-family: 'Press Start 2P', monospace;
 }
 
-.or-divider { text-align: center; margin: 12px 0; color: #615282; font-size: 0.55rem; }
-.profile-tag { margin-top: 25px; color: #00ffff; font-size: 0.6rem; border-top: 3px dashed #1c1533; padding-top: 12px; text-align: center;}
-.footer-credits { margin-top: 8px; color: #43394f; font-size: 0.45rem; text-align: center;}
+.or-divider { text-align: center; margin: 12px 0; color: #888; font-size: 0.6rem; }
+.profile-tag { margin-top: 25px; color: #00ffcc; font-size: 0.65rem; border-top: 4px dashed #ffaa00; padding-top: 12px; text-align: center;}
+.footer-credits { margin-top: 8px; color: #777; font-size: 0.5rem; text-align: center;}
 
-/* Neon Dynamic Loading Interfaces */
-.progress-container {
-    width: 100%; height: 16px; background: #040209; border: 3px solid #ff0055; margin: 15px 0; padding: 2px;
-}
+/* Normal Progress Bars */
+.progress-container { width: 100%; height: 16px; background: #000; border: 3px solid #ffaa00; margin: 15px 0; padding: 2px; }
 #lobby-progress-bar { width: 0%; height: 100%; background: #00ffcc; }
 
-.error-title { color: #ff0055; font-size: 1.2rem; margin-bottom: 10px; }
-.error-text { color: #fff; font-size: 0.6rem; line-height: 1.6; background: #210714; border: 3px solid #ff0055; padding: 12px; }
+.error-title { color: #ff3333; font-size: 1.2rem; margin-bottom: 10px; }
+.error-text { color: #fff; font-size: 0.65rem; line-height: 1.5; background: #330000; border: 3px solid #ff3333; padding: 12px; }
 
-/* Map Canvas Wrapper & Viewport */
-#game-screen { position: relative; width: 100%; height: 100%; background: #05030a; overflow: hidden;}
+/* Game Screen Elements */
+#game-screen { position: relative; width: 100%; height: 100%; background: #0e0816; overflow: hidden;}
 #top-ui {
     position: absolute; top: 0; left: 0; width: 100%; height: 55px;
-    background: #0e071e; border-bottom: 4px solid #ff0055;
+    background: #190f26; border-bottom: 4px solid #ffaa00;
     display: flex; justify-content: space-between; align-items: center; padding: 0 15px; z-index: 5;
 }
-#target-color-display { font-size: 0.65rem; color: #ffeb3b; text-shadow: 2px 2px #000; }
-#timer-display { font-size: 1.1rem; color: #ff0055; }
-#alive-counter { font-size: 0.6rem; color: #00ffcc; }
+#target-color-display { font-size: 0.75rem; color: #ffff00; }
+#timer-display { font-size: 1.2rem; color: #ffffff; }
+#alive-counter { font-size: 0.7rem; color: #00ffcc; }
 
 #notification-area { position: absolute; top: 70px; right: 15px; width: 260px; display: flex; flex-direction: column; gap: 6px; z-index: 5; }
-.notif { background: #ff0055; border: 2px solid #fff; padding: 6px 10px; font-size: 0.45rem; color: white; animation: slideOutFade 2.5s forwards; }
+.notif { background: #ff3333; border: 2px solid #fff; padding: 6px 10px; font-size: 0.5rem; color: white; animation: slideOutFade 2.5s forwards; }
 
-/* 3D Dynamic Changing Perspective Matrix */
+/* Game Map Perspective Board Wrapper */
 #stage-wrapper { 
     width: 100%; height: 100%; 
     display: flex; justify-content: center; align-items: center; 
-    perspective: 950px;
+    perspective: 1000px;
     overflow: hidden;
-    /* Traditional Retro Tabletop Arcade Board Underlay */
-    background: linear-gradient(rgba(18, 10, 36, 0.4) 2px, transparent 2px), linear-gradient(90deg, rgba(18, 10, 36, 0.4) 2px, transparent 2px);
-    background-size: 40px 40px;
 }
 
-/* ARCADE CHUNKY BOARD LAYOUT BUILD */
+/* CLASSIC WOODEN FINISH RETRO BOARD GAME BACKGROUND */
 #game-map {
     position: relative; width: 800px; height: 800px; 
-    background-color: #160f29; 
-    /* Heavy Wooden Finish Retro Board Borders */
-    border: 14px solid #4a2b11;
-    outline: 4px solid #ffea00;
-    box-shadow: 0 0 0 6px #000, 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.6);
+    background-color: #221538; 
+    border: 14px solid #5c3a21; /* Wooden Color Border */
+    outline: 4px solid #ffaa00;  /* Yellow Light Outline */
+    box-shadow: 0 15px 30px rgba(0,0,0,0.7);
     transform-style: preserve-3d;
     will-change: transform;
 }
 
-.tile { position: absolute; width: 76px; height: 76px; border: 4px solid #0e071e; background-color: #251b3d; transition: background-color 0.2s; }
-.tile.falling { transform: translateZ(-800px) rotateX(45deg); opacity: 0; transition: transform 0.9s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 0.9s; }
+.tile { position: absolute; width: 76px; height: 76px; border: 4px solid #140d24; background-color: #2d1e47; transition: background-color 0.2s; }
+.tile.falling { transform: translateZ(-800px) rotateX(30deg); opacity: 0; transition: transform 0.8s, opacity 0.8s; }
 
-/* RETRO arcade CHUNKY BOX CHARACTER DESIGNS */
+/* 3D BOX/CUBE CHARACTER DESIGN SYSTEM */
 .entity { 
     position: absolute; 
-    width: 34px; height: 34px; 
+    width: 36px; height: 36px; 
     transform-style: preserve-3d;
     will-change: left, top, transform;
 }
 
-/* 3D Box Facade Injection Modules */
 .entity::before {
     content: '';
     position: absolute;
     width: 100%; height: 100%;
     background: inherit;
     border: 3px solid #ffffff;
-    box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
 }
 
-.entity.bot { background: #ff0055; box-shadow: 0 0 14px #ff0055; }
-.entity.local-player { background: #00ffcc; box-shadow: 0 0 20px #00ffcc; }
-.entity.peer-player { background: #ffea00; box-shadow: 0 0 20px #ffea00; }
+.entity.bot { background: #ff3333; box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
+.entity.local-player { background: #00ffcc; box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
+.entity.peer-player { background: #ffff00; box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
 
 .entity-name {
     position: absolute; top: -28px; left: 50%; transform: translateX(-50%) rotateX(-55deg);
-    background: #000; border: 2px solid #fff; color: #fff; padding: 3px 6px; font-size: 6px; white-space: nowrap;
+    background: #000; border: 2px solid #fff; color: #fff; padding: 3px 6px; font-size: 7px; white-space: nowrap;
 }
 
-/* Anti-stuck Precision Control Deck HUD */
-#mobile-controls { position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: space-between; padding: 0 40px; z-index: 6; pointer-events: none; }
-#joystick-zone { width: 115px; height: 115px; background: rgba(14, 7, 30, 0.9); border: 4px solid #00ffcc; border-radius: 50%; position: relative; pointer-events: auto; box-shadow: 0 0 15px rgba(0,255,204,0.3); }
-#joystick-knob { width: 40px; height: 40px; background: #ff0055; border: 3px solid #fff; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-#jump-btn { width: 85px; height: 85px; background: #140d28; border: 4px solid #ff0055; border-radius: 50%; color: white; font-size: 0.55rem; cursor: pointer; pointer-events: auto; box-shadow: 0 0 12px rgba(255,0,85,0.4); font-family: 'Press Start 2P', monospace;}
+/* NEW ARROW BUTTON HUD LAYOUT (FIXES JOYSTICK STUCK COMPLETELY) */
+#mobile-controls { 
+    position: absolute; bottom: 15px; left: 0; width: 100%; 
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding: 0 30px; z-index: 6; pointer-events: none; 
+}
 
-#spectator-controls { position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%); background: #0d081b; border: 4px solid #ff0055; padding: 12px 20px; text-align: center; z-index: 7; }
-.spec-btn { background: #140d28; border: 2px solid #
+#arrow-pad {
+    display: flex; flex-direction: column; align-items: center;
+    background: rgba(0, 0, 0, 0.4); padding: 8px; border-radius: 10px;
+    pointer-events: auto;
+}
+
+.middle-arrows {
+    display: flex; align-items: center; gap: 24px; margin: 4px 0;
+}
+
+.center-spacer { width: 50px; height: 50px; }
+
+.arrow-btn {
+    width: 54px; height: 54px; background: #ffaa00; border: 3px solid #000;
+    border-radius: 6px; font-size: 1.2rem; color: #000; font-weight: bold;
+    cursor: pointer; box-shadow: 0 4px 0 #996600;
+}
+.arrow-btn:active {
+    transform: translateY(3px); box-shadow: 0 1px 0 #996600; background: #ffcc00;
+}
+
+#jump-btn { 
+    width: 80px; height: 80px; background: #ff3333; border: 4px solid #000; 
+    border-radius: 50%; color: white; font-size: 0.6rem; cursor: pointer; 
+    pointer-events: auto; box-shadow: 0 5px 0 #990000; font-family: 'Press Start 2P', monospace;
+}
+#jump-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #990000; }
+
+#spectator-controls { position: absolute; bottom: 150px; left: 50%; transform: translateX(-50%); background: #190f26; border: 4px solid #ffaa00; padding: 12px 20px; text-align: center; z-index: 7; }
+.spec-btn { background: #291a3a; border: 2px solid #ffff00; color: #fff; padding: 8px 12px; font-size: 0.55rem; cursor: pointer; }
+.spec-btn.exit-spec { background: #5a1111; border-color: #ff5555; }
+
+@keyframes slideOutFade { 85% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-20px); } }
