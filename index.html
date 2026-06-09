@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>COLOR CHASE 2D</title>
+    <title>COLOR CHASE 2D - RETRO EDITION</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
 </head>
@@ -11,49 +11,50 @@
 
     <div id="fullscreen-overlay" class="screen-overlay">
         <div class="menu-container text-center">
-            <h2 style="color: #ff0057; margin-bottom: 15px;">LANDSCAPE MODE REQUIRED</h2>
-            <p style="font-size: 14px; margin-bottom: 25px; line-height: 1.4;">Please turn your device sideways to horizontal mode, then tap the button below to activate full screen immersion mode.</p>
-            <button class="menu-btn action-btn" onclick="activateImmersiveFullscreen()" style="margin: 0 auto; display: block; float: none; text-align: center;">ENTER GAME ARENA</button>
+            <h2 style="color: #ff0057; margin-bottom: 15px; font-family: 'Courier New', monospace;">INSERT COIN TO START</h2>
+            <p style="font-size: 14px; margin-bottom: 25px; line-height: 1.4; color: #8b7ca3;">PLEASE TURN DEVICE SIDEWAYS TO LANDSCAPE MODE, THEN PRESS THE BUTTON BELOW TO BOOT SYSTEM RETRO CABINET.</p>
+            <button class="menu-btn action-btn" onclick="activateImmersiveFullscreen()" style="margin: 0 auto; display: block; float: none; text-align: center;">LAUNCH RETRO ARENA</button>
         </div>
     </div>
 
     <div id="main-menu" class="screen-overlay hidden">
         <div class="menu-container">
             <h1 class="game-title">COLOR CHASE 2D</h1>
+            <div class="arcade-subtext">-- RETRO SYSTEM V2.6 --</div>
             
             <div class="menu-options">
-                <button class="menu-btn" onclick="showScreen('name-screen', 'pvp')">ONLINE PVP</button>
-                <button class="menu-btn" onclick="showScreen('name-screen', 'friend')">FRIEND MODE (P2P LIVE)</button>
-                <button class="menu-btn" onclick="showScreen('ai-difficulty-screen', 'ai')">AI MODE (BOTS)</button>
-                <button class="menu-btn" onclick="alert('Master level elements locked!')">ACHIEVEMENTS</button>
+                <button class="menu-btn" onclick="showScreen('name-screen', 'pvp')">▶ ONLINE PVP MATCH</button>
+                <button class="menu-btn" onclick="showScreen('name-screen', 'friend')">▶ FRIEND LINK MODE (P2P)</button>
+                <button class="menu-btn" onclick="showScreen('ai-difficulty-screen', 'ai')">▶ VS AI BOTS CABINET</button>
+                <button class="menu-btn" onclick="alert('HIGH SCORES RECORD LOCKED!')">▶ HALL OF FAME (LOCK)</button>
             </div>
             
-            <div class="profile-tag">Profile Status: RIYANSHU</div>
-            <div class="footer-credits">(c) 2026 Developed with Gemini Peer Engine</div>
+            <div class="profile-tag">OPERATOR PROFILE: RIYANSHU</div>
+            <div class="footer-credits">© 2026 RETRO GEMINI PEER ENGINE PROTOCOL</div>
         </div>
     </div>
 
     <div id="name-screen" class="screen-overlay hidden">
         <div class="menu-container sub-menu">
-            <h2 id="name-screen-title">ENTER IDENTITY DEPLOYMENT</h2>
-            <input type="text" id="username-input" placeholder="Enter Nickname..." maxlength="12" value="RIYANSHU">
+            <h2 id="name-screen-title">INITIALIZE IDENTITY CHIP</h2>
+            <input type="text" id="username-input" placeholder="PILOT NICKNAME..." maxlength="12" value="RIYANSHU">
             
             <div id="friend-options" class="hidden">
-                <input type="text" id="room-name-input" placeholder="Room Tag (e.g., Riyanshu's Room)">
-                <button class="menu-btn action-btn" onclick="hostFriendRoom()">GENERATE UNIQUE CODE</button>
-                <div class="or-divider">- SECURE PEER CONNECT -</div>
-                <input type="text" id="join-code-input" placeholder="Enter Friend's 4-Digit Code">
-                <button class="menu-btn action-btn" onclick="connectToFriendRoom()">CONNECT TO UNIQUE CODE</button>
+                <input type="text" id="room-name-input" placeholder="ROOM TAG CODEX...">
+                <button class="menu-btn action-btn" onclick="hostFriendRoom()">GENERATE TRANSMISSION CODE</button>
+                <div class="or-divider">- LINK FREQUENCY RADAR -</div>
+                <input type="text" id="join-code-input" placeholder="ENTER 4-DIGIT CODE">
+                <button class="menu-btn action-btn" onclick="connectToFriendRoom()">INTERCEPT FREQUENCY LINK</button>
             </div>
 
-            <button id="start-matchmaking-btn" class="menu-btn action-btn hidden" onclick="startMatchmakingLoop()">START MATCHMAKING</button>
-            <button class="menu-btn back-btn" onclick="showScreen('main-menu')">BACK TO SYSTEM</button>
+            <button id="start-matchmaking-btn" class="menu-btn action-btn hidden" onclick="startMatchmakingLoop()">START MATCHMAKING SEC.</button>
+            <button class="menu-btn back-btn" onclick="showScreen('main-menu')">ABORT CHIP BOOT</button>
         </div>
     </div>
 
     <div id="lobby-screen" class="screen-overlay hidden">
         <div class="menu-container sub-menu text-center">
-            <h2 id="lobby-status">SYNCHRONIZING RECEPTACLES...</h2>
+            <h2 id="lobby-status">LOCKING TRANSMISSION STREAMS...</h2>
             <div id="room-info-display" class="hidden"></div>
             
             <div class="progress-container">
@@ -62,38 +63,38 @@
             
             <div id="player-list-lobby"></div>
             
-            <button id="start-p2p-game-btn" class="menu-btn action-btn hidden" onclick="broadcastGameLaunchSignal()" style="background:#2e6b40; border-color:#48a362; margin-bottom: 10px;">LAUNCH MATCH NOW</button>
-            <button id="lobby-cancel-btn" class="menu-btn back-btn" onclick="exitToMenu()" style="margin-top:0;">ABORT SEQUENCE</button>
+            <button id="start-p2p-game-btn" class="menu-btn action-btn hidden" onclick="broadcastGameLaunchSignal()" style="background:#1b4a29; border-color:#2a703e; margin-bottom: 10px;">BOOT ARENA GRID NOW</button>
+            <button id="lobby-cancel-btn" class="menu-btn back-btn" onclick="exitToMenu()" style="margin-top:0;">SHUTDOWN LINK</button>
         </div>
     </div>
 
     <div id="server-error-screen" class="screen-overlay hidden">
         <div class="menu-container sub-menu text-center">
-            <h2 class="error-title">SERVER CRASH</h2>
-            <p class="error-text">The Online PVP cluster is currently under heavy traffic loads. Connection timed out after 20.0 seconds of inactivity.</p>
+            <h2 class="error-title">CONNECTION LOST</h2>
+            <p class="error-text">ONLINE PVP CABINET CLUSTER REFUSED SIGNAL response. TIMEOUT AT 20.0 SECONDS OF COLD HANDSHAKE.</p>
             
             <div class="menu-options" style="margin-top: 20px;">
-                <button class="menu-btn action-btn" onclick="retryMatchmaking()">RETRY SEQUENCE</button>
-                <button class="menu-btn back-btn" onclick="showScreen('main-menu')" style="margin-top:0;">BACK TO TERMINAL</button>
+                <button class="menu-btn action-btn" onclick="retryMatchmaking()">RE-TRIGGER TRANSMISSION</button>
+                <button class="menu-btn back-btn" onclick="showScreen('main-menu')" style="margin-top:0;">RETURN TO BIO TERMINAL</button>
             </div>
         </div>
     </div>
 
     <div id="ai-difficulty-screen" class="screen-overlay hidden">
         <div class="menu-container sub-menu">
-            <h2>CHOOSE MATRIX PROFILE</h2>
-            <button class="menu-btn" onclick="startAIMode('beginner')">BEGINNER MATRIX (Normal Bots)</button>
-            <button class="menu-btn" onclick="startAIMode('intermediate')">INTERMEDIATE ARCHTYPE (Smart Bots)</button>
-            <button class="menu-btn" onclick="startAIMode('master')">MASTER ARCHTYPE (Khatarnak Bots)</button>
+            <h2>SELECT AI MATRIX ARCHTYPE</h2>
+            <button class="menu-btn" onclick="startAIMode('beginner')">🟢 RETRO ROOKIE BOTS (EASY)</button>
+            <button class="menu-btn" onclick="startAIMode('intermediate')">🟡 CYBER HUNTER BOTS (MEDIUM)</button>
+            <button class="menu-btn" onclick="startAIMode('master')">🔴 MASTER ELITE KHATARNAK BOTS</button>
             <button class="menu-btn back-btn" onclick="showScreen('main-menu')">BACK</button>
         </div>
     </div>
 
     <div id="game-screen" class="hidden">
         <div id="top-ui">
-            <div id="target-color-display">INITIALIZING RUN TIME LOG...</div>
+            <div id="target-color-display">SCANNING GRID PULSE...</div>
             <div id="timer-display">20s</div>
-            <div id="alive-counter">Entities: 20/20</div>
+            <div id="alive-counter">SHIPS: 20/20</div>
         </div>
 
         <div id="notification-area"></div>
@@ -103,10 +104,10 @@
         </div>
 
         <div id="spectator-controls" class="hidden">
-            <p id="spectator-msg">IDENTITY DISPLACED - MONITORING FIELD FEED</p>
+            <p id="spectator-msg">PILOT DISPLACED - MONITORING REMOTELY</p>
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 8px;">
-                <button class="spec-btn" onclick="spectateNextEntity()">CYCLE MATRIX FOCUS</button>
-                <button class="spec-btn exit-spec" onclick="exitToMenu()">SHUT DOWN FEED</button>
+                <button class="spec-btn" onclick="spectateNextEntity()">CYCLE CAMERA HACK</button>
+                <button class="spec-btn exit-spec" onclick="exitToMenu()">KILL FEED SOURCE</button>
             </div>
         </div>
 
@@ -114,7 +115,7 @@
             <div id="joystick-zone">
                 <div id="joystick-knob"></div>
             </div>
-            <button id="jump-btn" onpointerdown="triggerLocalPlayerJump()">JUMP</button>
+            <button id="jump-btn" onpointerdown="triggerLocalPlayerJump()">THRUST</button>
         </div>
     </div>
 
