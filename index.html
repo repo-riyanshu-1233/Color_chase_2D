@@ -3,29 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>COLOR CHASE 2D - RETRO EDITION</title>
+    <title>COLOR CHASE 2D - ARCADE BOARD</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
 </head>
 <body>
 
-    <div id="fullscreen-overlay" class="screen-overlay">
-        <div class="menu-container text-center">
-            <h2 style="color: #ff0057; margin-bottom: 15px; font-family: 'Courier New', monospace;">INSERT COIN TO START</h2>
-            <p style="font-size: 14px; margin-bottom: 25px; line-height: 1.4; color: #8b7ca3;">PLEASE TURN DEVICE SIDEWAYS TO LANDSCAPE MODE, THEN PRESS THE BUTTON BELOW TO BOOT SYSTEM RETRO CABINET.</p>
-            <button class="menu-btn action-btn" onclick="activateImmersiveFullscreen()" style="margin: 0 auto; display: block; float: none; text-align: center;">LAUNCH RETRO ARENA</button>
-        </div>
-    </div>
-
-    <div id="main-menu" class="screen-overlay hidden">
+    <div id="main-menu" class="screen-overlay">
         <div class="menu-container">
             <h1 class="game-title">COLOR CHASE 2D</h1>
-            <div class="arcade-subtext">-- RETRO SYSTEM V2.6 --</div>
+            <div class="arcade-subtext">-- RETRO BOARD EDITION --</div>
             
             <div class="menu-options">
-                <button class="menu-btn" onclick="showScreen('name-screen', 'pvp')">▶ ONLINE PVP MATCH</button>
-                <button class="menu-btn" onclick="showScreen('name-screen', 'friend')">▶ FRIEND LINK MODE (P2P)</button>
-                <button class="menu-btn" onclick="showScreen('ai-difficulty-screen', 'ai')">▶ VS AI BOTS CABINET</button>
+                <button class="menu-btn" onclick="triggerModeSelection('name-screen', 'pvp')">▶ ONLINE PVP MATCH</button>
+                <button class="menu-btn" onclick="triggerModeSelection('name-screen', 'friend')">▶ FRIEND LINK MODE (P2P)</button>
+                <button class="menu-btn" onclick="triggerModeSelection('ai-difficulty-screen', 'ai')">▶ VS AI BOTS CABINET</button>
                 <button class="menu-btn" onclick="alert('HIGH SCORES RECORD LOCKED!')">▶ HALL OF FAME (LOCK)</button>
             </div>
             
@@ -48,7 +40,7 @@
             </div>
 
             <button id="start-matchmaking-btn" class="menu-btn action-btn hidden" onclick="startMatchmakingLoop()">START MATCHMAKING SEC.</button>
-            <button class="menu-btn back-btn" onclick="showScreen('main-menu')">ABORT CHIP BOOT</button>
+            <button class="menu-btn back-btn" onclick="exitToMenu()">ABORT CHIP BOOT</button>
         </div>
     </div>
 
@@ -75,7 +67,7 @@
             
             <div class="menu-options" style="margin-top: 20px;">
                 <button class="menu-btn action-btn" onclick="retryMatchmaking()">RE-TRIGGER TRANSMISSION</button>
-                <button class="menu-btn back-btn" onclick="showScreen('main-menu')" style="margin-top:0;">RETURN TO BIO TERMINAL</button>
+                <button class="menu-btn back-btn" onclick="exitToMenu()" style="margin-top:0;">RETURN TO BIO TERMINAL</button>
             </div>
         </div>
     </div>
@@ -86,7 +78,7 @@
             <button class="menu-btn" onclick="startAIMode('beginner')">🟢 RETRO ROOKIE BOTS (EASY)</button>
             <button class="menu-btn" onclick="startAIMode('intermediate')">🟡 CYBER HUNTER BOTS (MEDIUM)</button>
             <button class="menu-btn" onclick="startAIMode('master')">🔴 MASTER ELITE KHATARNAK BOTS</button>
-            <button class="menu-btn back-btn" onclick="showScreen('main-menu')">BACK</button>
+            <button class="menu-btn back-btn" onclick="exitToMenu()">BACK</button>
         </div>
     </div>
 
@@ -94,7 +86,7 @@
         <div id="top-ui">
             <div id="target-color-display">SCANNING GRID PULSE...</div>
             <div id="timer-display">20s</div>
-            <div id="alive-counter">SHIPS: 20/20</div>
+            <div id="alive-counter">BOXES: 20/20</div>
         </div>
 
         <div id="notification-area"></div>
@@ -115,7 +107,7 @@
             <div id="joystick-zone">
                 <div id="joystick-knob"></div>
             </div>
-            <button id="jump-btn" onpointerdown="triggerLocalPlayerJump()">THRUST</button>
+            <button id="jump-btn" onpointerdown="triggerLocalPlayerJump()">JUMP</button>
         </div>
     </div>
 
