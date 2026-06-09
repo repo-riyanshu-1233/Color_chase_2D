@@ -104,15 +104,15 @@
 
         <div id="mobile-controls">
             <div id="arrow-pad">
-                <button id="btn-up" class="arrow-btn" onpointerdown="setMoveDirection('up', true)" onpointerup="setMoveDirection('up', false)" onpointercancel="setMoveDirection('up', false)">▲</button>
+                <button id="btn-up" class="arrow-btn" onpointerdown="handleButtonTouch(event, 'up', true)" onpointerup="handleButtonTouch(event, 'up', false)" onpointercancel="handleButtonTouch(event, 'up', false)">▲</button>
                 <div class="middle-arrows">
-                    <button id="btn-left" class="arrow-btn" onpointerdown="setMoveDirection('left', true)" onpointerup="setMoveDirection('left', false)" onpointercancel="setMoveDirection('left', false)">◀</button>
+                    <button id="btn-left" class="arrow-btn" onpointerdown="handleButtonTouch(event, 'left', true)" onpointerup="handleButtonTouch(event, 'left', false)" onpointercancel="handleButtonTouch(event, 'left', false)">◀</button>
                     <div class="center-spacer"></div>
-                    <button id="btn-right" class="arrow-btn" onpointerdown="setMoveDirection('right', true)" onpointerup="setMoveDirection('right', false)" onpointercancel="setMoveDirection('right', false)">▶</button>
+                    <button id="btn-right" class="arrow-btn" onpointerdown="handleButtonTouch(event, 'right', true)" onpointerup="handleButtonTouch(event, 'right', false)" onpointercancel="handleButtonTouch(event, 'right', false)">▶</button>
                 </div>
-                <button id="btn-down" class="arrow-btn" onpointerdown="setMoveDirection('down', true)" onpointerup="setMoveDirection('down', false)" onpointercancel="setMoveDirection('down', false)">▼</button>
+                <button id="btn-down" class="arrow-btn" onpointerdown="handleButtonTouch(event, 'down', true)" onpointerup="handleButtonTouch(event, 'down', false)" onpointercancel="handleButtonTouch(event, 'down', false)">▼</button>
             </div>
-            <button id="jump-btn" onpointerdown="triggerLocalPlayerJump()">JUMP</button>
+            <button id="jump-btn" onpointerdown="handleJumpTouch(event)">JUMP</button>
         </div>
     </div>
 
